@@ -1,4 +1,7 @@
 from tkinter import*
+from tkinter import messagebox
+import tkinter as tk
+#root = tk.Tk()
 
 largura = 650
 altura = 500
@@ -82,27 +85,37 @@ class Calculator(object):
 
     def calcular(self, *args):
         if self.notaAD1.get() == "" or self.notaAP1.get() == "" or self.notaAD2.get() == "":
-            return None
+            x = messagebox.showerror(title="Atenção", message="Insira todas as notas para realizar o cálculo!")
+            return x
         else:
-            self.nota_ad1 = self.notaAD1.get()
-            self.nota_ap1 = self.notaAP1.get()
-            self.nota_ad2 = self.notaAD2.get()
-            ad1 = int(self.nota_ad1)*2
-            ap1 = int(self.nota_ap1)*8
-            n1 = ad1+ap1
-            ad2 = int(self.nota_ad2)*2
-            nota_2 = 1200 - (n1 + ad2)
-            self.ap2 = (nota_2/8)/10
-            print(self.ap2)
-            self.resultado(self.ap2)
+            self.nota_ad1 = float(self.notaAD1.get())
+            self.nota_ap1 = float(self.notaAP1.get())
+            self.nota_ad2 = float(self.notaAD2.get())
+
+            if self.nota_ad1 > 10 or self.nota_ap1 > 10 or self.nota_ad2 > 10 :
+
+                x = messagebox.showerror(title="Atenção", message="Insira valores válidos! \nNotas entre 0 e 10")
+                return x
+            
+            if self.nota_ap1 == 0:
+                self.nota_final['text'] = (f"Uma pena você terá que fazer a AP3!\nDe acordo com critérios da faculdade\n uma prova não pode ter nota 0")
+            else: 
+                ad1 = self.nota_ad1*0.2
+                ap1 = self.nota_ap1*0.8
+                n1 = ad1+ap1
+                ad2 = self.nota_ad2*0.2
+                n2 = (n1 + ad2)/2
+                self.ap2 = ((6-n2)*2)/0.8
+                print(self.ap2)
+                self.resultado(self.ap2)
 
 
     def resultado(self, x):
         if x <= 0:
-            self.nota_final["text"] = "Relaxa você já passou nessa disciplina!"
+            self.nota_final["text"] = "Relaxa você já passou nessa disciplina! \nMas cuidado você não pode zerar a AP2"
 
         else:
-            self.nota_final['text'] = (f"Você precisa tirar {self.ap2} na AP2 \npara passar nessa disciplina!")
+            self.nota_final['text'] = (f"Você precisa tirar {self.ap2:.1f} na AP2 \npara passar nessa disciplina!")
 
 def esc(event):
     calculadora.destroy()
@@ -114,7 +127,7 @@ entradas = Calculator(calculadora)
 calculadora.title("Calculadora CEDERJ")
 
 # Coloca o ícone na janela
-calculadora.iconbitmap("Calculator.ico")
+calculadora.iconbitmap('C:/Users/piura/Desktop/Calculadora/calculadora_cederj/Imagens/Calculator.ico')
 
 # Define a geometria da janela
 largura_screen = calculadora.winfo_screenwidth()
